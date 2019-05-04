@@ -1,0 +1,6 @@
+cfn
+dist
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
