@@ -8,9 +8,9 @@
     "build": "npm run build:tsc && npm run build:synth",
     "build:tsc": "tsc",
     "build:synth": "cdk synth -o cfn",
-    "deploy": "cdk deploy KgarsjoComAppStack",
-    "deploy:budget": "cdk deploy KgarsjoComBudgetStack",
-    "deploy:ci": "cdk deploy KgarsjoComCIStack",
+    "deploy": "cdk deploy KgarsjoComApp${DEPLOYMENT_STAGE}Stack --require-approval never",
+    "deploy:budget": "cdk deploy KgarsjoComBudget${DEPLOYMENT_STAGE}Stack",
+    "deploy:ci": "cdk deploy KgarsjoComCI${DEPLOYMENT_STAGE}Stack",
     "watch": "tsc -w"
   },
   "devDependencies": {

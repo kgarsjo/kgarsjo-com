@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15
+    steps:
+      - checkout
+      - run: npm run release
+
+  deploy-prod:
+    docker:
+      - image: circleci/node:10.15
+    environment:
+      AWS_REGION: us-west-2
+      DEPLOYMENT_STAGE: Prod
+    steps:
+      - checkout
+      - run: npm run release
+      - run: npm run deploy
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: master
+      - deploy-prod:
+          filters:
+            branches:
+              only: master

@@ -2,7 +2,8 @@
   "name": "kgarsjo-com",
   "private": true,
   "scripts": {
-    "release": "lerna bootstrap && lerna run build"
+    "deploy": "lerna run deploy",
+    "release": "npm install && lerna bootstrap && lerna run build"
   },
   "devDependencies": {
     "lerna": "^3.13.4"
