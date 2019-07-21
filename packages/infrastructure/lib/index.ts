@@ -11,5 +11,5 @@ const getStackName = (prefix: string) => (
 
 const app = new App();
 new AppStack(app, getStackName('KgarsjoComApp'));
-new BudgetStack(app, getStackName('KgarsjoComBudget'), config);
-new CIStack(app, getStackName('KgarsjoComCI'));
+new BudgetStack(app, 'KgarsjoComBudgetStack', config);
+new CIStack(app, 'KgarsjoComCIStack');
