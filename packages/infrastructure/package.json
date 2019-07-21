@@ -5,22 +5,24 @@
     "infrastructure": "bin/infrastructure.js"
   },
   "scripts": {
-    "build": "npm run build:tsc && npm run build:synth",
-    "build:tsc": "tsc",
-    "build:synth": "cdk synth -o cfn",
-    "deploy": "cdk deploy KgarsjoComApp${DEPLOYMENT_STAGE}Stack --require-approval never",
-    "deploy:budget": "cdk deploy KgarsjoComBudget${DEPLOYMENT_STAGE}Stack",
-    "deploy:ci": "cdk deploy KgarsjoComCI${DEPLOYMENT_STAGE}Stack",
+    "build": "tsc",
+    "build:cfn": "npm run build && cdk synth -o cfn",
+    "deploy": "cdk deploy KgarsjoComApp${DEPLOYMENT_STAGE:-Devo}Stack --require-approval never",
+    "deploy:budget": "cdk deploy KgarsjoComBudgetStack",
+    "deploy:ci": "cdk deploy KgarsjoComCIStack",
     "watch": "tsc -w"
   },
   "devDependencies": {
+    "@types/glob": "^7.1.1",
     "@types/node": "8.10.45",
     "aws-cdk": "^0.29.0",
+    "glob": "^7.1.4",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^0.29.0",
     "@aws-cdk/aws-budgets": "^0.29.0",
+    "@aws-cdk/aws-cloudfront": "^0.29.0",
     "@aws-cdk/aws-cloudwatch": "^0.29.0",
     "@aws-cdk/cdk": "^0.29.0",
     "source-map-support": "^0.5.9"

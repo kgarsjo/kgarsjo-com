@@ -15,8 +15,7 @@ jobs:
       DEPLOYMENT_STAGE: Prod
     steps:
       - checkout
-      - run: npm run release
-      - run: npm run deploy
+      - run: npm run publish
 workflows:
   version: 2
   build-and-deploy:
