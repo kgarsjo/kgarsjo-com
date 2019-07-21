@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "deploy": "lerna run deploy",
-    "release": "npm install && lerna bootstrap && lerna run build"
+    "release": "npm install && lerna bootstrap && lerna run build && lerna run test"
   },
   "devDependencies": {
     "lerna": "^3.13.4"
