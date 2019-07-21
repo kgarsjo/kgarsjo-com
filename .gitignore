@@ -1,2 +1,4 @@
+coverage
+dist
 lerna-debug.log
 node_modules
