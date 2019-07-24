@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "bootstrap": "npm install && lerna bootstrap",
+    "build": "lerna run build && lerna run bootstrap",
     "deploy": "lerna run deploy --stream",
-    "release": "npm run bootstrap && lerna run build && lerna run test",
+    "release": "npm run bootstrap && npm run build && lerna run test",
     "package": "lerna run package",
     "publish": "npm run release && npm run package && npm run deploy"
   },
