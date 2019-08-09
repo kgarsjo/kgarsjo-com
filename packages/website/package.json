@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "package": "packager write -n KgarsjoComWebsite -r ./build",
+    "package": "node ./node_modules/@kgarsjo-com/packager/dist/index.js write -n KgarsjoComWebsite -r ./build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

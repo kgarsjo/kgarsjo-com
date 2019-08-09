@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "bin": "dist/index.js",
+  "bin": {
+    "packager": "dist/index.js"
+  },
   "scripts": {
-    "build": "tsc",
+    "prepare": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   },
