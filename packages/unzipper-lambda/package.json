@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "package": "packager write -n KgarsjoComUnzipperLambda -d dist -d node_modules"
+    "package": "node ./node_modules/@kgarsjo-com/packager/dist/index.js write -n KgarsjoComUnzipperLambda -d dist -d node_modules"
   },
   "author": "",
   "license": "ISC",
