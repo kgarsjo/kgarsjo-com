@@ -2,14 +2,23 @@ import { Construct, CfnOutput, CfnResource } from "@aws-cdk/cdk";
 import { CfnCloudFrontOriginAccessIdentity, CloudFrontWebDistribution, CloudFrontAllowedMethods, HttpVersion, PriceClass, ViewerProtocolPolicy } from '@aws-cdk/aws-cloudfront';
 import { Function, S3Code, Runtime } from "@aws-cdk/aws-lambda";
 import { IBucket, Bucket } from "@aws-cdk/aws-s3";
-import { getRequiredParameter, ConfigParams } from "../../config";
 import { PolicyStatement, CanonicalUserPrincipal } from "@aws-cdk/aws-iam";
 
+interface WebsiteProps {
+    unzipperLambdaBucket: IBucket,
+    unzipperLambdaKey: string,
+    unzipperLambdaHandler: string,
+    websiteBucket: IBucket,
+    websiteKey: string,
+}
+
 export default class Website extends Construct {
-    constructor(scope: Construct, buildOutputBucket: IBucket) {
+    constructor(scope: Construct, props: WebsiteProps) {
         super(scope, 'KgarsjoComWebiste');
 
-        const originAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this,'OriginAccessIdentity', {
+        const { unzipperLambdaHandler, unzipperLambdaBucket, unzipperLambdaKey, websiteBucket, websiteKey } = props;
+
+        const originAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this, 'OriginAccessIdentity', {
             cloudFrontOriginAccessIdentityConfig: {
                 comment: '',
             }
@@ -31,22 +40,19 @@ export default class Website extends Construct {
         });
 
         const unzipperLambda = new Function(this, 'KgarsjoWebsiteUnzipper', {
-            code: new S3Code(
-                buildOutputBucket,
-                getRequiredParameter(ConfigParams.UNZIPPER_LAMBDA_KEY),
-            ),
+            code: new S3Code(unzipperLambdaBucket, unzipperLambdaKey),
             runtime: Runtime.NodeJS810,
-            handler: 'dist/index.handler',
+            handler: unzipperLambdaHandler,
             environment: {
-                SOURCE_BUCKET_NAME: buildOutputBucket.bucketName,
+                SOURCE_BUCKET_NAME: websiteBucket.bucketName,
             },
             timeout: 60,
         });
         unzipperLambda.addToRolePolicy(
             new PolicyStatement()
                 .addAction('s3:GetObject')
-                .addResource(buildOutputBucket.bucketArn)
-                .addResource(`${buildOutputBucket.bucketArn}/*`)
+                .addResource(websiteBucket.bucketArn)
+                .addResource(`${websiteBucket.bucketArn}/*`)
         );
         unzipperLambda.addToRolePolicy(
             new PolicyStatement()
@@ -61,7 +67,7 @@ export default class Website extends Construct {
             properties: {
                 ServiceToken: unzipperLambda.functionArn,
                 DestinationBucket: hostingBucket.bucketName,
-                Key: getRequiredParameter(ConfigParams.WEBSITE_KEY),
+                Key: websiteKey,
             }
         });
         unzipperCustomResource.node.addDependency(unzipperLambda);

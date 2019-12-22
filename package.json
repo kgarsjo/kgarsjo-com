@@ -4,12 +4,12 @@
   "scripts": {
     "bootstrap": "npm install && lerna bootstrap",
     "build": "lerna run build",
-    "deploy": "lerna run deploy --stream",
+    "deploy": "cloud-deploy",
     "release": "npm run bootstrap && npm run build && lerna run test",
-    "package": "lerna run package",
-    "publish": "npm run release && npm run package && npm run deploy"
+    "publish": "npm run release && npm run deploy"
   },
   "devDependencies": {
+    "@kgarsjo/cloud-deploy": "^0.1.2",
     "lerna": "^3.13.4"
   }
 }

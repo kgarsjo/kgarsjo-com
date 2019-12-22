@@ -6,9 +6,6 @@
   },
   "scripts": {
     "build": "tsc && cdk synth -o build",
-    "deploy": "cdk deploy KgarsjoComAppStack --require-approval never",
-    "deploy:budget": "cdk deploy KgarsjoComBudgetStack",
-    "deploy:ci": "cdk deploy KgarsjoComCIStack",
     "watch": "tsc -w"
   },
   "devDependencies": {

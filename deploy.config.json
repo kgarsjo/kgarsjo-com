@@ -1,0 +1,42 @@
+{
+    "strategy": "aws-cfn",
+    "bucket": "kgarsjocomcistack-buildoutputbucketd64ad6af-154p0724mmuq8",
+    "artifacts": [
+        {
+            "name": "UnzipperLambda",
+            "patterns": [
+                "packages/unzipper-lambda/dist/**/*",
+                "packages/unzipper-lambda/node_modules/**/*"
+            ]
+        },
+        {
+            "name": "Website",
+            "patterns": ["packages/website/build/**/*"]
+        }
+    ],
+    "stacks": [
+        {
+            "name": "KgarsjoComCIStack",
+            "artifactNamesConsumed": [],
+            "capabilities": ["CAPABILITY_IAM"],
+            "parameters": {},
+            "templatePath": "packages/infrastructure/build/KgarsjoComCIStack.template.yaml"
+        },
+        {
+            "name": "KgarsjoComBudgetStack",
+            "artifactNamesConsumed": [],
+            "capabilities": ["CAPABILITY_IAM"],
+            "parameters": {},
+            "templatePath": "packages/infrastructure/build/KgarsjoComBudgetStack.template.yaml"
+        },
+        {
+            "name": "KgarsjoComAppStack3",
+            "artifactNamesConsumed": ["UnzipperLambda", "Website"],
+            "capabilities": ["CAPABILITY_IAM"],
+            "parameters": {
+                "UnzipperLambdaHandler": "packages/unzipper-lambda/dist/index.handler"
+            },
+            "templatePath": "packages/infrastructure/build/KgarsjoComAppStack.template.yaml"
+        }
+    ]
+}
