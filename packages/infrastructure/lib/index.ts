@@ -5,11 +5,7 @@ import CIStack from './CIStack';
 import config from './config';
 import BudgetStack from './BudgetStack';
 
-const getStackName = (prefix: string) => (
-    `${prefix}${config.stage}Stack`
-);
-
 const app = new App();
-new AppStack(app, getStackName('KgarsjoComApp'));
+new AppStack(app, 'KgarsjoComAppStack');
 new BudgetStack(app, 'KgarsjoComBudgetStack', config);
 new CIStack(app, 'KgarsjoComCIStack');

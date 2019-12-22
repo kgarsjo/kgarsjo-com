@@ -20,7 +20,6 @@ const getManifestParameters = (): {[key: string]: any} => {
 const config = {
     budgetSubscriberEmail: 'krgarsjo@gmail.com',
     parameters: getManifestParameters(),
-    stage: process.env.DEPLOYMENT_STAGE || 'Devo',
 };
 
 console.log('Constructing with parameters:', config.parameters, '\n');

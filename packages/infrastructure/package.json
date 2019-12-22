@@ -5,9 +5,8 @@
     "infrastructure": "bin/infrastructure.js"
   },
   "scripts": {
-    "build": "tsc",
-    "build:cfn": "npm run build && cdk synth -o cfn",
-    "deploy": "cdk deploy KgarsjoComApp${DEPLOYMENT_STAGE:-Devo}Stack --require-approval never",
+    "build": "tsc && cdk synth -o build",
+    "deploy": "cdk deploy KgarsjoComAppStack --require-approval never",
     "deploy:budget": "cdk deploy KgarsjoComBudgetStack",
     "deploy:ci": "cdk deploy KgarsjoComCIStack",
     "watch": "tsc -w"

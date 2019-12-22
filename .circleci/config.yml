@@ -12,7 +12,6 @@ jobs:
       - image: circleci/node:10.15
     environment:
       AWS_REGION: us-west-2
-      DEPLOYMENT_STAGE: Prod
     steps:
       - checkout
       - run: npm run publish
