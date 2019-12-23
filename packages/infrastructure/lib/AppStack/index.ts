@@ -1,5 +1,5 @@
 import { App, Stack, CfnParameter } from '@aws-cdk/cdk';
-import Website from './Website';
+import Website from '../Constructs/Website';
 import { Bucket } from '@aws-cdk/aws-s3';
 
 export interface AppStackConfig {

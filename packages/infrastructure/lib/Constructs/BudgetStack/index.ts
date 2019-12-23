@@ -6,10 +6,15 @@ import Budget, {
     SubscriptionType,
     ThresholdType,
     TimeUnit,
-} from "../Constructs/Budget";
+} from "../Budget";
+import { CfnBudget } from "@aws-cdk/aws-budgets";
 
-export interface AppBudgetProps {
+export interface BudgetProps {
     budgetSubscriberEmail: string,
+    budgetLimit: CfnBudget.SpendProperty,
+    budgetTimeUnit: TimeUnit,
+    budgetType: BudgetType,
+    projectName: string,
 };
 
 interface OverBudgetNotificationProps {
@@ -30,18 +35,21 @@ const getOverBudgetNotification = ({ notificationType, subscriberEmail }: OverBu
 });
 
 export default class BudgetStack extends Stack {
-    constructor(scope: Construct, id: string, props: AppBudgetProps) {
+    constructor(scope: Construct, id: string, props: BudgetProps) {
         super(scope, id);
 
-        const { budgetSubscriberEmail: subscriberEmail } = props;
-        new Budget(this, 'KgarsjoComBudget', {
-            budgetName: 'KgarsjoComBudget',
-            budgetType: BudgetType.COST,
-            budgetLimit: {
-                amount: 1,
-                unit: 'USD',
-            },
-            timeUnit: TimeUnit.MONTHLY,
+        const {
+            budgetLimit,
+            budgetTimeUnit: timeUnit,
+            budgetType,
+            budgetSubscriberEmail: subscriberEmail,
+            projectName,
+        } = props;
+        new Budget(this, `${projectName}Budget`, {
+            budgetName: `${projectName}Budget`,
+            budgetType,
+            budgetLimit,
+            timeUnit,
             notificationsWithSubscribers: [
                 getOverBudgetNotification({
                     notificationType: NotificationType.FORECASTED,
