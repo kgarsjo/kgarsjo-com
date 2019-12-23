@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { App } from '@aws-cdk/cdk';
+import { App } from '@aws-cdk/core';
 import AppStack from './AppStack';
 import BootstrapStack from './Constructs/BootstrapStack';
 import BudgetStack from './Constructs/BudgetStack';

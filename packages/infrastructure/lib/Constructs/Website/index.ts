@@ -1,5 +1,5 @@
-import { Construct, CfnOutput, CfnResource } from "@aws-cdk/cdk";
-import { CfnCloudFrontOriginAccessIdentity, CloudFrontWebDistribution, CloudFrontAllowedMethods, HttpVersion, PriceClass, ViewerProtocolPolicy } from '@aws-cdk/aws-cloudfront';
+import { Construct, CfnOutput, CfnResource, Duration } from "@aws-cdk/core";
+import { OriginAccessIdentity } from '@aws-cdk/aws-cloudfront';
 import { Function, S3Code, Runtime } from "@aws-cdk/aws-lambda";
 import { IBucket, Bucket } from "@aws-cdk/aws-s3";
 import { PolicyStatement, CanonicalUserPrincipal } from "@aws-cdk/aws-iam";
@@ -14,53 +14,49 @@ interface WebsiteProps {
 
 export default class Website extends Construct {
     constructor(scope: Construct, props: WebsiteProps) {
-        super(scope, 'KgarsjoComWebiste');
-
         const { unzipperLambdaHandler, unzipperLambdaBucket, unzipperLambdaKey, websiteBucket, websiteKey } = props;
+        super(scope, `Website`);
 
-        const originAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this, 'OriginAccessIdentity', {
-            cloudFrontOriginAccessIdentityConfig: {
-                comment: '',
-            }
-        });
+        const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
         
-        const oaiS3UserId = this.node.resolve(originAccessIdentity.getAtt("S3CanonicalUserId"));
+        const oaiS3UserId = originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId;
 
         const hostingBucket = new Bucket(this, 'HostingBucket');
-        hostingBucket.addToResourcePolicy(new PolicyStatement()
-            .addActions('s3:GetObject')
-            .addPrincipal(new CanonicalUserPrincipal(oaiS3UserId))
-            .addResource(hostingBucket.arnForObjects('*')));
-        hostingBucket.addToResourcePolicy(new PolicyStatement()
-            .addActions('s3:ListBucket')
-            .addPrincipal(new CanonicalUserPrincipal(oaiS3UserId))
-            .addResource(hostingBucket.bucketArn));
+        hostingBucket.addToResourcePolicy(new PolicyStatement({
+            actions: ['s3:GetObject'],
+            principals: [new CanonicalUserPrincipal(oaiS3UserId)],
+            resources: [hostingBucket.arnForObjects('*')],
+        }));
+        hostingBucket.addToResourcePolicy(new PolicyStatement({
+            actions: ['s3:ListBucket'],
+            principals: [new CanonicalUserPrincipal(oaiS3UserId)],
+            resources: [hostingBucket.bucketArn],
+        }));
+
         new CfnOutput(this, 'HostingBucketName', {
             value: hostingBucket.bucketName,
         });
 
-        const unzipperLambda = new Function(this, 'KgarsjoWebsiteUnzipper', {
+        const unzipperLambda = new Function(this, `WebsiteUnzipper`, {
             code: new S3Code(unzipperLambdaBucket, unzipperLambdaKey),
-            runtime: Runtime.NodeJS810,
+            runtime: Runtime.NODEJS_12_X,
             handler: unzipperLambdaHandler,
             environment: {
                 SOURCE_BUCKET_NAME: websiteBucket.bucketName,
             },
-            timeout: 60,
+            timeout: Duration.seconds(60),
         });
-        unzipperLambda.addToRolePolicy(
-            new PolicyStatement()
-                .addAction('s3:GetObject')
-                .addResource(websiteBucket.bucketArn)
-                .addResource(`${websiteBucket.bucketArn}/*`)
-        );
-        unzipperLambda.addToRolePolicy(
-            new PolicyStatement()
-                .addAction('s3:DeleteObject')
-                .addAction('s3:PutObject')
-                .addResource(hostingBucket.bucketArn)
-                .addResource(`${hostingBucket.bucketArn}/*`)
-        );
+        unzipperLambda.addToRolePolicy(new PolicyStatement({
+            actions: [
+                's3:DeleteObject',
+                's3:GetObject',
+                's3:PutObject',
+            ],
+            resources: [
+                hostingBucket.bucketArn,
+                hostingBucket.arnForObjects('*'),
+            ]
+        }));
         
         const unzipperCustomResource = new CfnResource(this, 'UnzipperCustomResource', {
             type: 'Custom::Unzipper',
@@ -72,8 +68,9 @@ export default class Website extends Construct {
         });
         unzipperCustomResource.node.addDependency(unzipperLambda);
 
+        /*
         const appRoot = 'index.html';
-        const distribution = new CloudFrontWebDistribution(this, 'KgarsjoComDistribution', {
+        const distribution = new CloudFrontWebDistribution(this, 'Distribution', {
             defaultRootObject: appRoot,
             enableIpV6: true,
             errorConfigurations: [{
@@ -82,7 +79,7 @@ export default class Website extends Construct {
                 responsePagePath: `/${appRoot}`,
             }],
             httpVersion: HttpVersion.HTTP2,
-            priceClass: PriceClass.PriceClass100,
+            priceClass: PriceClass.PRICE_CLASS_100,
             originConfigs: [{
                 behaviors: [{
                     isDefaultBehavior: true,
@@ -94,10 +91,11 @@ export default class Website extends Construct {
                     s3BucketSource: hostingBucket,
                 },
             }],
-            viewerProtocolPolicy: ViewerProtocolPolicy.RedirectToHTTPS,
+            viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         });
         new CfnOutput(this, 'DistributionDomainName', {
             value: distribution.domainName
         });
+        */
     }
 }

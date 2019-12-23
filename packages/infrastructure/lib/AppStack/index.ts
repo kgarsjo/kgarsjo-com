@@ -1,4 +1,4 @@
-import { App, Stack, CfnParameter } from '@aws-cdk/cdk';
+import { App, Stack, CfnParameter } from '@aws-cdk/core';
 import Website from '../Constructs/Website';
 import { Bucket } from '@aws-cdk/aws-s3';
 
@@ -11,25 +11,23 @@ export default class AppStack extends Stack {
         super(scope, name);
 
         new Website(this, {
-            unzipperLambdaBucket: Bucket.import(this, 'UnzipperLambdaBucket', {
-                bucketName: new CfnParameter(this, 'UnzipperLambdaArtifactBucket', {
+            unzipperLambdaBucket: Bucket.fromBucketName(this, 'UnzipperLambdaBucket',
+                new CfnParameter(this, 'UnzipperLambdaArtifactBucket', {
                     type: 'String',
-                }).resolve(),
-            }),
+                }).valueAsString),
             unzipperLambdaKey: new CfnParameter(this, 'UnzipperLambdaArtifactKey', {
                 type: 'String',
-            }).resolve(),
+            }).valueAsString,
             unzipperLambdaHandler: new CfnParameter(this, 'UnzipperLambdaHandler', {
                 type: 'String',
-            }).resolve(),
-            websiteBucket: Bucket.import(this, 'WebsiteBucket', {
-                bucketName: new CfnParameter(this, 'WebsiteArtifactBucket', {
+            }).valueAsString,
+            websiteBucket: Bucket.fromBucketName(this, 'WebsiteBucket',
+                new CfnParameter(this, 'WebsiteArtifactBucket', {
                     type: 'String'
-                }).resolve(),
-            }),
+                }).valueAsString),
             websiteKey: new CfnParameter(this, 'WebsiteArtifactKey', {
                 type: 'String',
-            }).resolve(),
+            }).valueAsString,
         });
     }
 }

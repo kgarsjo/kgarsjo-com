@@ -10,17 +10,17 @@
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
-    "@types/node": "8.10.45",
-    "aws-cdk": "^0.29.0",
+    "@types/node": "^13.1.0",
+    "aws-cdk": "^1.19.0",
     "glob": "^7.1.4",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^0.29.0",
-    "@aws-cdk/aws-budgets": "^0.29.0",
-    "@aws-cdk/aws-cloudfront": "^0.29.0",
-    "@aws-cdk/aws-cloudwatch": "^0.29.0",
-    "@aws-cdk/cdk": "^0.29.0",
+    "@aws-cdk/aws-apigateway": "^1.19.0",
+    "@aws-cdk/aws-budgets": "^1.19.0",
+    "@aws-cdk/aws-cloudfront": "^1.19.0",
+    "@aws-cdk/aws-cloudwatch": "^1.19.0",
+    "@aws-cdk/core": "^1.19.0",
     "source-map-support": "^0.5.9"
   }
 }

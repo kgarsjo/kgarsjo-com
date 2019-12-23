@@ -1,5 +1,5 @@
-import { Stack, Construct, CfnOutput, Aws } from "@aws-cdk/cdk";
-import { User } from "@aws-cdk/aws-iam";
+import { Stack, Construct, CfnOutput, Aws, Duration } from "@aws-cdk/core";
+import { User, ManagedPolicy } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { BuildOutput } from "../../Constants/BuildOutput";
 
@@ -13,23 +13,27 @@ export default class BootstrapStack extends Stack {
 
         const { projectName } = props;
 
-        const adminConsoleUser = new User(this, 'AdminConsoleUser', { userName: `${projectName.toLowerCase()}-admin` });
-        adminConsoleUser.attachManagedPolicy('arn:aws:iam::aws:policy/AdministratorAccess');
+        new User(this, 'AdminConsoleUser', {
+            managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess')],
+            userName: `admin`,
+        });
 
-        const ciUser = new User(this, 'CIUser', { userName: `${projectName}CIUser` });
-        ciUser.attachManagedPolicy('arn:aws:iam::aws:policy/AdministratorAccess');
+        new User(this, 'CIUser', {managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess')],
+            userName: `${projectName}CIUser`,
+        });
 
-        const cliUser = new User(this, 'CLIUser', { userName: `${projectName}CLIUser` });
-        cliUser.attachManagedPolicy('arn:aws:iam::aws:policy/AdministratorAccess');
+        new User(this, 'CLIUser', {managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess')],
+            userName: `${projectName}CLIUser`,
+        });
 
         const buildOutputBucket = new Bucket(this, 'BuildOutputBucket', {
-            bucketName: `${projectName.toLowerCase()}-build-output-bucket-${Aws.accountId}`,
-            lifecycleRules: [{ expirationInDays: 3 }],
+            bucketName: `${projectName.toLowerCase()}-build-output-bucket-${Aws.ACCOUNT_ID}`,
+            lifecycleRules: [{ expiration: Duration.days(1) }],
         });
 
         new CfnOutput(this, BuildOutput.BUCKET_NAME_EXPORT, {
             value: buildOutputBucket.bucketName,
-            export: BuildOutput.BUCKET_NAME_EXPORT,
+            exportName: BuildOutput.BUCKET_NAME_EXPORT,
         })
     }
 }
