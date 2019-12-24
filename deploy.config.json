@@ -4,14 +4,16 @@
     "artifacts": [
         {
             "name": "UnzipperLambda",
+            "root": "packages/unzipper-lambda",
             "patterns": [
-                "packages/unzipper-lambda/dist/**/*",
-                "packages/unzipper-lambda/node_modules/**/*"
+                "dist/**/*",
+                "node_modules/**/*"
             ]
         },
         {
             "name": "Website",
-            "patterns": ["packages/website/build/**/*"]
+            "root": "packages/website/build",
+            "patterns": ["**/*"]
         }
     ],
     "stacks": [
@@ -26,9 +28,7 @@
             "name": "KgarsjoComAppStack",
             "artifactNamesConsumed": ["UnzipperLambda", "Website"],
             "capabilities": ["CAPABILITY_IAM"],
-            "parameters": {
-                "UnzipperLambdaHandler": "packages/unzipper-lambda/dist/index.handler"
-            },
+            "parameters": {},
             "templatePath": "packages/infrastructure/build/AppStack.template.json"
         }
     ]

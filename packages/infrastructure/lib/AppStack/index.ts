@@ -18,9 +18,6 @@ export default class AppStack extends Stack {
             unzipperLambdaKey: new CfnParameter(this, 'UnzipperLambdaArtifactKey', {
                 type: 'String',
             }).valueAsString,
-            unzipperLambdaHandler: new CfnParameter(this, 'UnzipperLambdaHandler', {
-                type: 'String',
-            }).valueAsString,
             websiteBucket: Bucket.fromBucketName(this, 'WebsiteBucket',
                 new CfnParameter(this, 'WebsiteArtifactBucket', {
                     type: 'String'

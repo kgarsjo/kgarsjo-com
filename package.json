@@ -9,7 +9,7 @@
     "publish": "npm run release && npm run deploy"
   },
   "devDependencies": {
-    "@kgarsjo/cloud-deploy": "^0.1.2",
+    "@kgarsjo/cloud-deploy": "^0.2.3",
     "lerna": "^3.13.4"
   }
 }
