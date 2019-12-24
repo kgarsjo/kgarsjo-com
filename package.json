@@ -10,6 +10,6 @@
   },
   "devDependencies": {
     "@kgarsjo/cloud-deploy": "^0.2.3",
-    "lerna": "^3.13.4"
+    "lerna": "^3.19.0"
   }
 }
