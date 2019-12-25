@@ -1,6 +1,8 @@
 {
     "strategy": "aws-cfn",
-    "bucket": "kgarsjocom-build-output-bucket-144053636142",
+    "bucket": {
+        "fromExport": "BuildOutputBucketName"
+    },
     "artifacts": [
         {
             "name": "UnzipperLambda",

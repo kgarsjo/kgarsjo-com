@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
       - run: npm run release
+      - save_cache:
+          key: "kgarsjo-com-build-{{ .Branch }}-{{ .Revision }}"
+          paths:
+            - ./
 
   deploy-beta:
     docker:
@@ -13,18 +17,41 @@ jobs:
     environment:
       AWS_REGION: us-west-2
     steps:
-      - checkout
-      - run: npm run release
-      - run: AWS_ACCESS_KEY_ID=$BETA_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$BETA_AWS_SECRET_ACCESS_KEY npm run deploy
+      - restore_cache:
+          key: "kgarsjo-com-build-{{ .Branch }}-{{ .Revision }}"
+      - run:
+          command: |
+            export AWS_ACCESS_KEY_ID=$BETA_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$BETA_AWS_SECRET_ACCESS_KEY
+            npm run deploy
+
+  deploy-prod:
+    docker:
+      - image: circleci/node:12.14
+    environment:
+      AWS_REGION: us-east-1
+    steps:
+      - restore_cache:
+          key: "kgarsjo-com-build-{{ .Branch }}-{{ .Revision }}"
+      - run:
+          command: |
+            export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
+            npm run deploy
 workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build:
+      - build
+      - deploy-beta:
+          requires:
+            - build
           filters:
             branches:
-              ignore: master
-      - deploy-beta:
+              only: master
+      - deploy-prod:
+          requires:
+            - deploy-beta
           filters:
             branches:
               only: master
