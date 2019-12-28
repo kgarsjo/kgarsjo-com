@@ -7,6 +7,13 @@ html, body {
     color: #eee;
 }
 
+noscript {
+    background-color: #a42f2f;
+    display: block;
+    margin: 1em 0;
+    padding: 1em;
+}
+
 a:link { color: #b8f5f0; }
 a:visited { color: #39ada3; }
 `;
@@ -22,6 +29,7 @@ const App = () => (
     <Fragment>
         <h1>Kevin Garsjo</h1>
         <h2>Software Engineer</h2>
+        <noscript>Enabling javascript is recommended but not required</noscript>
         <p>{emojiIcon('🏢', 'work')}SDE2 at Amazon</p>
         <p>{emojiIcon('🏠', 'home')}{"Living in Portland, OR"}</p>
         <p>{emojiIcon('🎓', 'education')}{"Bachelors of Science, CompSci, Universiy of Oregon"}</p>
