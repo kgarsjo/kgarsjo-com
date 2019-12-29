@@ -13,7 +13,7 @@ const config = {
     },
     budgetTimeUnit: TimeUnit.MONTHLY,
     budgetType: BudgetType.COST,
-    budgetSubscriberEmail: 'krgarsjo@gmail.com',
+    budgetSubscriberEmail: 'krgarsjo.auth+budgets@gmail.com',
     accountIDConfiguration: {
         '144053636142': {   // kgarsjocom-beta
             domainName: 'beta.kgarsjo.com',
