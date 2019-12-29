@@ -5,6 +5,8 @@ import { IBucket, Bucket } from "@aws-cdk/aws-s3";
 import { PolicyStatement, CanonicalUserPrincipal } from "@aws-cdk/aws-iam";
 
 interface WebsiteProps {
+    domainName: string,
+    sslCertificateARN: string,
     unzipperLambdaBucket: IBucket,
     unzipperLambdaKey: string,
     websiteBucket: IBucket,
@@ -13,7 +15,14 @@ interface WebsiteProps {
 
 export default class Website extends Construct {
     constructor(scope: Construct, props: WebsiteProps) {
-        const { unzipperLambdaBucket, unzipperLambdaKey, websiteBucket, websiteKey } = props;
+        const {
+            domainName,
+            sslCertificateARN,
+            unzipperLambdaBucket,
+            unzipperLambdaKey,
+            websiteBucket,
+            websiteKey,
+        } = props;
         super(scope, `Website`);
 
         const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
@@ -75,6 +84,10 @@ export default class Website extends Construct {
 
         const appRoot = 'index.html';
         const distribution = new CloudFrontWebDistribution(this, 'Distribution', {
+            aliasConfiguration: {
+                acmCertRef: sslCertificateARN,
+                names: [domainName],
+            },
             defaultRootObject: appRoot,
             enableIpV6: true,
             errorConfigurations: [{
@@ -97,6 +110,7 @@ export default class Website extends Construct {
             }],
             viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         });
+
         new CfnOutput(this, 'DistributionDomainName', {
             value: distribution.domainName
         });

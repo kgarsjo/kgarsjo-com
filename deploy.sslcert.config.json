@@ -1,0 +1,16 @@
+{
+    "strategy": "aws-cfn",
+    "bucket": {
+        "fromExport": "BuildOutputBucketName"
+    },
+    "artifacts": [],
+    "stacks": [
+        {
+            "name": "KgarsjoComSSLCertStack",
+            "artifactNamesConsumed": [],
+            "capabilities": [],
+            "parameters": {},
+            "templatePath": "packages/infrastructure/build/SSLCertStack.template.json"
+        }
+    ]
+}
