@@ -15,6 +15,10 @@ const config = {
     budgetType: BudgetType.COST,
     budgetSubscriberEmail: 'krgarsjo.auth+budgets@gmail.com',
     accountIDConfiguration: {
+        '386462433626': {   // kgarsjocom-sandbox
+            domainName: 'sandbox.kgarsjo.com',
+            sslCertificateARN: 'arn:aws:acm:us-east-1:386462433626:certificate/fef017e4-9cfd-46a8-a725-a6119aab5d7b',
+        },
         '144053636142': {   // kgarsjocom-beta
             domainName: 'beta.kgarsjo.com',
             sslCertificateARN: 'arn:aws:acm:us-east-1:144053636142:certificate/0f8f3cbb-19aa-4fb2-924c-c0c727e11378',
