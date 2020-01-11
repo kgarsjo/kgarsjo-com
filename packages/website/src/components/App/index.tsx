@@ -32,7 +32,7 @@ const App = () => (
         <noscript>Enabling javascript is recommended but not required</noscript>
         <p>{emojiIcon('🏢', 'work')}SDE2 at Amazon</p>
         <p>{emojiIcon('🏠', 'home')}{"Living in Portland, OR"}</p>
-        <p>{emojiIcon('🎓', 'education')}{"Bachelors of Science, CompSci, Universiy of Oregon"}</p>
+        <p>{emojiIcon('🎓', 'education')}{"Bachelors of Science, CompSci, University of Oregon"}</p>
         <footer>
             <div><a href="https://github.com/kgarsjo">GitHub</a></div>
             <div><a href="https://www.linkedin.com/in/krgarsjo/">LinkedIn</a></div>
