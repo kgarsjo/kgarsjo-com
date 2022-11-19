@@ -40,7 +40,7 @@
     "chalk": "^3.0.0",
     "glob": "^7.1.6",
     "node-logger": "0.0.1",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^5.0.1",
     "typescript": "^3.7.4",
     "yazl": "^2.5.1"
   },
